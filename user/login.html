@@ -50,24 +50,30 @@
     $('form').on('submit', function () {
 
         // 1. 获取用户填写的表单信息
-        var info = $(this).serialize();
-        // console.log(info);
+        var data = $(this).serialize();
+        // console.log(data);
 
         // 2. 通过 ajax 将信息发送给服务器
         $.ajax({
             // url: 'http://localhost:3000/user/login',
-
             //  /api = http://localhost:3000
+            
             url: '/api/user/login',
             type: 'post',
-            data: info,
-            success: function (data) {
+            data: data,
+            success: function (info) {
                 // 3. 得到服务端的响应结果
-                // console.log(data);
+                // console.log(info);
 
                 // 处理登录后的逻辑（跳转）
                 //  / = www.letao.com/index.html
-                // location.href = '/';
+
+                if(info.success) {
+                    location.href = '/';
+                    return;
+                }
+                // 提示信息
+                alert(info.message);
             }
         });
 
