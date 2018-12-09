@@ -97,9 +97,10 @@
                     // 4. 处理相应逻辑
                     if (info.success) {
                         // 将其祖先元素li删除
-                        _this.parents('li').fadeOut(function () {
-                            $(this).remove();
-                        }, 500);
+                        // _this.parents('li').fadeOut(function () {
+                        //     $(this).remove();
+                        // }, 500);
+                        _this.parents('li').remove();
                     }
                 }
             });
