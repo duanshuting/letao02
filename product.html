@@ -12,6 +12,11 @@
     <link rel="stylesheet" href="res/fontAwesome/css/font-awesome.min.css"/>
     <link rel="stylesheet" href="css/common.css"/>
     <link rel="stylesheet" href="css/product.css"/>
+    <style>
+        .active {
+            background-color: pink;
+        }
+    </style>
 </head>
 <body>
     <div class="cz_layout">
@@ -29,9 +34,9 @@
         </div>
     </div>
     <div class="p_option">
-        <a href="#" class="btn_cart fa fa-shopping-cart"></a>
-        <a href="#" class="btn_addCart">加入购物车</a>
-        <a href="#" class="btn_pay">立即购买</a>
+        <a href="/cart.html" class="btn_cart fa fa-shopping-cart"></a>
+        <a href="javascript:;" class="btn_addCart">加入购物车</a>
+        <a href="javascript:;" class="btn_pay">立即购买</a>
     </div>
 
     <!-- 自定义模板 -->
@@ -72,9 +77,9 @@
         </div>
         <div class="p_number">
             数量：
-            <span class="jian">-</span>
-            <input type="tel" value="1" />
-            <span class="jia">+</span>
+            <span class="jian btn_act">-</span>
+            <input type="tel" value="1" class="btn_num" />
+            <span class="jia btn_act">+</span>
             剩余：{{num}} 件
         </div>
         <div class="p_detail">
@@ -135,6 +140,68 @@
         });
 
 
+    // 添加购物车
+        // 给加入购物车按钮添加点击事件
+        $('.btn_addCart').on('click', function () {
+        
+        // 1. 获取商品信息
+        // 1) 获取输入框的商品数量
+        var num = $('.btn_num').val();
+        // 2) 获取商品的型号的内容(谁有active类名)
+        var size = $('span.active').text();
+
+        // 2. 并发送请求到后端
+            $.ajax({
+                url: '/api/cart/addCart',
+                type: 'post',
+                data: {
+                    productId: 6,
+                    num: num,
+                    size: size
+                },
+                success: function (info) {
+                    // 3. 等待响应的结果
+                    // console.log(info);
+
+                    if (info.error) {
+                        mui.alert(
+                            '您尚未登录，请先登录!',
+                            '提示',
+                            '确定',
+                            function () {
+                               location.href = '/user/login.html?url=' + location.href;
+                            }
+                        );
+                        return;
+                    }
+                    mui.toast('添加成功!');
+                }
+            });
+        });
+
+        // 获取商品型号
+        $('#detail').on('click', '.btn_size', function () {
+
+            // 点击型号时，给当前型号添加active，其他兄弟移除active
+            $(this).addClass('active').siblings().removeClass('active');
+        });
+
+        // 修改商品数量
+        $('#detail').on('click', '.btn_act', function () {
+
+            // 获取当前元素的兄弟的数量(内容)
+            var input = $(this).siblings('input');
+            var n = input.val(); 
+
+            // 判断当前类名是否是 jia
+            if ($(this).is('.jia')) {
+                // 加
+                return input.val(++n);
+            }
+            // 减
+            if (n <= 1) return;
+            input.val(--n);
+        });
 
 
         mui(function(){
