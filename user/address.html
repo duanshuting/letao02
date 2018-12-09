@@ -69,7 +69,8 @@
                 // console.log(info);
 
                 // 未登录
-                if (info.error) return location.href = '/user/login.html';
+                // 希望用户登录成功后，跳转到指定的页面，将这个页面以参数形式传给 login.html
+                if (info.error) return location.href = '/user/login.html?url=' + location.href;
 
                 // 已登录,调用模板引擎
                 var html = template('tpl', {lists: info});

@@ -46,6 +46,30 @@
 <script src="../res/mui/js/mui.min.js"></script>
 <script src="../js/jquery.min.js"></script>
 <script>
+
+// 此页面如果有url参数，那么登录成功后跳转至该页面(address.html)，如果没有则默认跳转至首页
+
+    // 1.判断有没有url，并且获得url参数的值  
+    // 2.根据url实现跳转
+
+    // location.search = "?url=http:///www.letao.com/user/address.html"
+    // slice(): 从第一个位置截取（ 将 ? 字符删除）
+    var search = location.search.slice(1);
+
+    // 使用正则匹配url的值
+    var reg = /url=(.+)/;
+    var match = reg.exec(search);
+    
+    // if (match) {
+    //     var url = match[1];
+    // } else {
+    //     var url = '/';
+    // }
+
+    var url = match && match[1];
+    url = url || '/';
+
+
     // 监听表单提交
     $('form').on('submit', function () {
 
@@ -69,7 +93,7 @@
                 //  / = www.letao.com/index.html
 
                 if(info.success) {
-                    location.href = '/';
+                    location.href = url;
                     return;
                 }
                 // 提示信息
