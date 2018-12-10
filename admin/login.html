@@ -20,13 +20,13 @@
                     <span class="input-group-addon">
                         <i class="fa fa-user"></i>
                     </span>
-                    <input type="text" class="form-control" placeholder="用户名">
+                    <input type="text" class="form-control" name="username" placeholder="用户名">
                 </div>
                 <div class="input-group input-group-lg">
                     <span class="input-group-addon">
                         <i class="fa fa-key"></i>
                     </span>
-                    <input type="password" class="form-control" placeholder="密码">
+                    <input type="password" class="form-control" name="password" placeholder="密码">
                 </div>
                 <button type="submit" class="btn btn-lg btn-primary btn-block">登 录</button>
             </form>
@@ -35,5 +35,43 @@
     
     <script src="./assets/jquery/jquery.min.js"></script>
     <script src="./assets/bootstrap/js/bootstrap.min.js"></script>
+    <script>
+
+        // 获取地址参数
+        var search = location.search.slice(1);
+        // 使用正则匹配 url 参数的值
+        var reg = /url=(.+)/;
+        // 匹配到的地址
+        var match = reg.exec(search);
+        var url = match && match[1];
+        url = url || '/admin';
+
+        $('form').on('submit', function () {
+            
+            // 1. 获取用户填写的表单信息
+            var data = $(this).serialize();
+            
+            // 2. 发送请求至服务端
+            $.ajax({
+                url: '/api/employee/employeeLogin',
+                type: 'post',
+                data: data,
+                success: function (info) {
+                    // 3. 等待响应结果
+                    // console.log(info);
+                    
+                    // 登录成功
+                    if (info.success) {
+                        return location.href = url;
+                    }
+                    // 提示错误
+                    alert(info.message);
+                }
+            });
+
+            // 阻止表单默认提交
+            return false;
+        });
+    </script>
 </body>
 </html>
