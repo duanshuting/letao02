@@ -16,3 +16,20 @@
 			if (info.error) location.href = '/admin/login.html';
 		}
 	});
+
+
+	// 退出登录
+	$('.fa-sign-out').parent().on('click', function () {
+		// 发送请求
+		$.ajax({
+			url: '/api/employee/employeeLogout',
+			type: 'get',
+			success: function (info) {
+				// console.log(info);
+
+				if (info.success) {
+					location.href = '/admin/login.html?url=' + location.href;
+				}
+			}
+		});
+	});
